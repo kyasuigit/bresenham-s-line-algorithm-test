@@ -16,85 +16,54 @@ class graphicsWindow:
             self.__image[point[0], point[1]] = color
 
     def drawLine(self, point1, point2, color):
+        x1 = int(point1.get(0, 0))
+        y1 = int(point1.get(1, 0))
 
-        firstPoint = [0, 0]
-        firstPoint[0] = int(point1.get(0, 0))
-        firstPoint[1] = int(point1.get(1, 0))
-        self.drawPoint(firstPoint, color)
+        self.drawPoint([x1, y1], color)
 
-        lastPoint = [0, 0]
-        lastPoint[0] = int(point2.get(0, 0))
-        lastPoint[1] = int(point2.get(1, 0))
+        x2 = int(point2.get(0, 0))
+        y2 = int(point2.get(1, 0))
 
-        deltaX = lastPoint[0] - firstPoint[0]
+        x_delta = x2-x1
+        y_delta = y2-y1
 
-        deltaY = lastPoint[1] - firstPoint[1]
+        abs_x_delta = abs(x_delta)
+        abs_y_delta = abs(y_delta)
 
-        if abs(deltaY) > abs(deltaX):
-            temp = firstPoint[0]
-            firstPoint[0] = firstPoint[1]
-            firstPoint[1] = temp
-
-            temp2 = lastPoint[0]
-            lastPoint[0] = lastPoint[1]
-            lastPoint[1] = temp2
-
-        deltaX = lastPoint[0] - firstPoint[0]
-        deltaY = lastPoint[1] - firstPoint[1]
-
-        currentpoint = firstPoint
-
-        print(currentpoint)
-
-        p = 0
-        for i in range(firstPoint[0], lastPoint[0]):
-            if i == firstPoint[0]:
-                p = 2 * deltaY - deltaX
-            else:
+        if abs_x_delta > abs_y_delta:
+            p = 2 * abs_x_delta - abs_x_delta
+            for i in range(0, abs_x_delta+1):
                 if p < 0:
-                    p = p + 2 * deltaY
+                    p = p + 2 * abs_y_delta
                 else:
-                    if currentpoint[1] < lastPoint[1]:
-                        currentpoint[1] += 1
+                    if y_delta < 0:
+                        y1 -= 1
                     else:
-                        currentpoint[1] = currentpoint[1] - 1
-                    p = p + 2 * deltaY - 2 * deltaX
-
-                if currentpoint[0] < lastPoint[0]:
-                    currentpoint[0] += 1
+                        y1 += 1
+                    p = p + 2 * abs_y_delta - 2 * abs_x_delta
+                if x_delta < 0:
+                    x1 -= 1
                 else:
-                    currentpoint[0] = currentpoint[0] - 1
-                self.drawPoint(currentpoint, color)
+                    x1 += 1
+                self.drawPoint([x1, y1], color)
 
-        # if 0 < m < 1:
-        #     for i in range(int(firstPoint[0]), int(lastPoint[0])):
-        #         if i == firstPoint[0]:
-        #             p = 2 * yDelta - xDelta
-        #         else:
-        #             if p < 0:
-        #                 p = p + 2 * yDelta
-        #
-        #             else:
-        #                 p = p + 2 * yDelta - 2 * xDelta
-        #                 currentPoint[1] += 1
-        #
-        #             currentPoint[0] += 1
-        #             self.drawPoint(currentPoint, color)
-        #
-        # elif m > 1 or m < -1:
-        #     for i in range(int(firstPoint[0]), int(lastPoint[0])):
-        #         if i == firstPoint[0]:
-        #             p = 2 * xDelta - yDelta
-        #         else:
-        #             if p < 0:
-        #                 p = p + 2 * xDelta
-        #
-        #             else:
-        #                 p = p + 2 * xDelta - 2 * yDelta
-        #                 currentPoint[0] += 1
-        #
-        #             currentPoint[1] += 1
-        #             self.drawPoint(currentPoint, color)
+        else:
+            p = 2 * abs_y_delta - abs_x_delta
+            for i in range (0, abs_y_delta+1):
+                if p < 0:
+                    p = p + 2 * abs_x_delta
+                else:
+                    if x_delta < 0:
+                        x1 -= 1
+                    else:
+                        x1 += 1
+                    p = p + 2 * abs_x_delta - 2 * abs_y_delta
+
+                if y_delta < 0:
+                    y1 -= 1
+                else:
+                    y1 +=1
+                self.drawPoint([x1, y1], color)
 
     def saveImage(self, fileName):
         self.__canvas.save(fileName)
